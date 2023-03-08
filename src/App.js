@@ -8,6 +8,7 @@ import { BsAlarm } from 'react-icons/bs'
 function App() {
   const [text, setText] = useState()
   const [num, setNum] = useState()
+  const [modal1, setmodal1] = useState(true)
   const inputPriceFormat = (str) => {
     const comma = (str)=> {
       str = String(str);
@@ -19,10 +20,7 @@ function App() {
     };
     return comma(uncomma(str));
   }
-  const submitFunc = (e) => {
-    e.preventDefault();
-    alert(JSON.stringify({ name:text, price:num }))
-  } 
+
   return (
     <>
     <h1>Button</h1>
@@ -52,9 +50,14 @@ function App() {
       </Article>
       <h1>Modal</h1>
       <Article>
-      <Button color={green} size={small}>open modal</Button>
+      <Button color={green} size={small} onClick={()=> setmodal1((pre)=> !pre)}>open modal</Button>
       <Button color={pinktitle} size={medium}>open modal</Button>
+      <Modal state={modal1}>
+          <div>나는 모달 <button onClick={()=> setmodal1((pre)=> !pre)}>버튼</button></div>
+      </Modal>
+
       </Article>
+
     </>
   )
 }
@@ -79,4 +82,33 @@ const Article = styled.article`
   align-items: flex-start;
   gap: 10px;
   margin-bottom: 10px;
+`
+
+const Modal = styled.div`
+  display: ${({state})=> 
+                state ? 'none' : 'block'};
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 300px;
+  background-color:gray;
+  border-radius: 10px;
+  
+
+
+  div {
+    background-color: #72C255;
+    width: 150px;
+    height: 100px;
+    text-align: center;
+    color: white;
+    line-height: 100px;
+    font-weight: 800;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 `

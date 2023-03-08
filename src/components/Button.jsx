@@ -35,6 +35,7 @@ const StyledButton = styled.button`
   }
 `
 
+
 function Button({color, size, children, onClick}) {
   return (
     <>
