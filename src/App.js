@@ -74,8 +74,6 @@ function App() {
     <p>아래의 코드를 읽어보자. /(\d)(?=(?:\d{3})...)/ (연속되는 3개의 숫자, y)가 존재하면, 앞에 있는 x가 숫자인 것을 매칭시킨다는 말이다.</p>
     <p><span className='label'>- 정규표현식 : <span style={{color:"red"}}>x(?!y)</span></span>란? 부정 전방탐색으로, y를 만족하면서 전방에 x가 없는 경우를 말한다.</p>
     <p><span className='label'>- 정규표현식 : <span style={{color:"red"}}>x+</span></span>란 x의 반복을 의미한다.</p>
-    <p>아래의 코드를 읽어보자. /...(?:\d{3})+(?!\d))/ 를 읽어보면, 연속되는 3개의 숫자가 반복되면을 의미한다. </p>
-    <p><span className='label'>- replace 안에 있는 내용</span>을 읽어보면 이렇다. <span style={{color:"red"}}>"$1,"</span> 이 역시도 정규표현식인데, 앞에서 생성한 정규표현식의 그룹마다 ,(콤마)를 찍어주자는 말이다.</p>
     <p> 핵심은 (\b)에서 생성한 그룹에 달려있다. 해당 그룹이 생성되는지의 여부에 따라서 정규표현식은 동작한다.</p>
     <p><img src={img01}/></p>
     <p><img src={refex}/></p>
@@ -97,32 +95,44 @@ function App() {
     </PracticeDiv2>
 
 
-    <h1>Modal</h1> 
-    <PracticeDiv3>
-    <Button color={green} event={()=> setValue({...value, edit1: true})
-      }>open modal</Button>
-    <Button size="huge" color={orange} event={()=> setValue({...value, edit2: true})}
-    >open modal2</Button>
-    </PracticeDiv3>
-    {value.edit1 && (<>
-      <Modal1 state={value.edit1}/>
-      <ModalinnerBox>
-        <div><p>닫기와 확인 버튼 2개가 있고, 외부 영역을 눌러도 모달이 닫히지 않아요.</p></div>
+      <h1>Modal</h1>
+      <PracticeDiv3>
+        <Button color={green} event={() => setValue({ ...value, edit1: true })
+        }>open modal</Button>
+        <Button size="huge" color={orange} event={() => setValue({ ...value, edit2: true })}
+        >open modal2</Button>
+      </PracticeDiv3>
+      {value.edit1 && (<>
+        <Modal1 state={value.edit1} />
+        <ModalinnerBox>
+          <div><p>닫기와 확인 버튼 2개가 있고, 외부 영역을 눌러도 모달이 닫히지 않아요.</p></div>
+          <div>
+            <Button color={green} event={() => setValue({ ...value, edit1: false })}>닫기</Button>
+            <Button color={orange}>확인</Button>
+          </div>
+        </ModalinnerBox>
+      </>)}
+      {value.edit2 && (<>
+        <Modal1 state={value.edit2} onClick={() => setValue({ ...value, edit2: false })} />
+        <ModalinnerBox>
+          <div><p>닫기 버튼 1개가 있고,<br /> 외부 영역을 누르면 모달이 닫혀요.</p></div>
+          <div>
+            <Button color={green} event={() => setValue({ ...value, edit2: false })}>닫기</Button>
+          </div>
+        </ModalinnerBox>
+      </>)}
+
+
+
+      <h1>Select</h1>
+      <PracticeDiv4>
         <div>
-          <Button color={green} event={()=> setValue({...value, edit1: false})}>닫기</Button>
-          <Button color={orange}>확인</Button>
+          <button><span>리액트</span> ▼</button>
         </div>
-      </ModalinnerBox>
-    </>)}
-    {value.edit2 && (<>
-      <Modal1 state={value.edit2} onClick={()=> setValue({...value, edit2: false})}/>
-      <ModalinnerBox>
-        <div><p>닫기 버튼 1개가 있고,<br/> 외부 영역을 누르면 모달이 닫혀요.</p></div>
         <div>
-          <Button color={green} event={()=> setValue({...value, edit2: false})}>닫기</Button>
+        <button><span>리액트</span> ▼</button>
         </div>
-      </ModalinnerBox>
-    </>)}
+      </PracticeDiv4>  
 
     </>
   )
@@ -218,5 +228,32 @@ const ModalinnerBox = styled.div`
     text-align: center;
     font-weight:800;
     font-size: 25px;
+  }
+`
+
+const PracticeDiv4 = styled.div`
+  width: 90%;
+  height: 200px;
+  margin: auto;
+  border: 2px solid gray;
+  border-radius: 10px;
+  display: grid;
+  text-align: center;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  button {
+    width: 80%;
+    height: 30px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    background-color: transparent;
+    margin-top: 10px;
+
+    span {
+      display: inline-block;
+      width: 150px;
+    }
   }
 `
