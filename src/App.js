@@ -5,13 +5,16 @@ import { IoIosArrowForward } from 'react-icons/io'
 import { VscBellDot } from 'react-icons/vsc'
 import Input from './Input'
 import img01 from './img/img01.png'
+import refex from './img/refex.png'
 
 function App() {
   const orange = "#EDA594"
   const green = "#55efc4"
   const [value, setValue] = useState({
     name:'',
-    num:''
+    num:'',
+    edit1:false,
+    edit2:false
   })
 
   // const inputPriceFormat = (str) => {
@@ -62,6 +65,8 @@ function App() {
           <Button color={green} label="BUTTON" />
         </div>
     </PracticeDiv1>
+
+
     <h1>input</h1>
     <div>
     <p>INPUT 컴포넌트 제어하기 : 정규표현식</p>
@@ -72,8 +77,8 @@ function App() {
     <p>아래의 코드를 읽어보자. /...(?:\d{3})+(?!\d))/ 를 읽어보면, 연속되는 3개의 숫자가 반복되면을 의미한다. </p>
     <p><span className='label'>- replace 안에 있는 내용</span>을 읽어보면 이렇다. <span style={{color:"red"}}>"$1,"</span> 이 역시도 정규표현식인데, 앞에서 생성한 정규표현식의 그룹마다 ,(콤마)를 찍어주자는 말이다.</p>
     <p> 핵심은 (\b)에서 생성한 그룹에 달려있다. 해당 그룹이 생성되는지의 여부에 따라서 정규표현식은 동작한다.</p>
-    <p> 숫자가 3자리 이하일 때, </p>
     <p><img src={img01}/></p>
+    <p><img src={refex}/></p>
     </div>
     <PracticeDiv2>
       <div>
@@ -90,11 +95,35 @@ function App() {
         }}/></p>
       </div>
     </PracticeDiv2>
+
+
     <h1>Modal</h1> 
     <PracticeDiv3>
-    <Button color={green}>open modal</Button>
-    <Button size="huge" color={orange}>open modal2</Button>
+    <Button color={green} event={()=> setValue({...value, edit1: true})
+      }>open modal</Button>
+    <Button size="huge" color={orange} event={()=> setValue({...value, edit2: true})}
+    >open modal2</Button>
     </PracticeDiv3>
+    {value.edit1 && (<>
+      <Modal1 state={value.edit1}/>
+      <ModalinnerBox>
+        <div><p>닫기와 확인 버튼 2개가 있고, 외부 영역을 눌러도 모달이 닫히지 않아요.</p></div>
+        <div>
+          <Button color={green} event={()=> setValue({...value, edit1: false})}>닫기</Button>
+          <Button color={orange}>확인</Button>
+        </div>
+      </ModalinnerBox>
+    </>)}
+    {value.edit2 && (<>
+      <Modal1 state={value.edit2} onClick={()=> setValue({...value, edit2: false})}/>
+      <ModalinnerBox>
+        <div><p>닫기 버튼 1개가 있고,<br/> 외부 영역을 누르면 모달이 닫혀요.</p></div>
+        <div>
+          <Button color={green} event={()=> setValue({...value, edit2: false})}>닫기</Button>
+        </div>
+      </ModalinnerBox>
+    </>)}
+
     </>
   )
 }
@@ -129,7 +158,7 @@ const PracticeDiv2 = styled.div`
 width: 90%;
 height: 100px;
 margin: auto;
-background-color: rgba(0,0,0,0.2);
+/* background-color: rgba(0,0,0,0.2); */
 
 div {
   margin-top:10px;
@@ -148,5 +177,46 @@ const PracticeDiv3 = styled.div`
   width: 90%;
   height: 100px;
   margin: auto;
-  background-color: rgba(0,0,0,0.2);
+  display: flex;
+  gap: 10px;
+  /* background-color: rgba(0,0,0,0.2); */
+`
+const Modal1 = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+`
+
+const ModalinnerBox = styled.div`
+  padding: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 200px;
+  background: white;
+  border: none;
+  border-radius: 15px;
+  transform: translate(-50%, -50%);
+
+  display: grid;
+  grid-template-rows: 1fr 30px;
+
+  div:nth-child(2) {
+    display: flex;
+    justify-content: flex-end;
+    gap:10px;
+    button {
+      display: block;
+    }
+  }
+
+  p {
+    text-align: center;
+    font-weight:800;
+    font-size: 25px;
+  }
 `
