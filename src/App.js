@@ -1,114 +1,152 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
-import Button from './components/Button'
+import styled, { createGlobalStyle } from 'styled-components'
+import Button from './Button'
 import { IoIosArrowForward } from 'react-icons/io'
-import { BsAlarm } from 'react-icons/bs'
-
+import { VscBellDot } from 'react-icons/vsc'
+import Input from './Input'
+import img01 from './img/img01.png'
 
 function App() {
-  const [text, setText] = useState()
-  const [num, setNum] = useState()
-  const [modal1, setmodal1] = useState(true)
-  const inputPriceFormat = (str) => {
-    const comma = (str)=> {
-      str = String(str);
-      return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
-    };
-    const uncomma = (str) => {
-      str = String(str);
-      return str.replace(/[^\d]+/g, "");
-    };
-    return comma(uncomma(str));
+  const orange = "#EDA594"
+  const green = "#55efc4"
+  const [value, setValue] = useState({
+    name:'',
+    num:''
+  })
+
+  // const inputPriceFormat = (str) => {
+  //   const comma = (str)=> {
+  //     str = String(str);
+  //     return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+  //   };
+  //   const uncomma = (str) => {
+  //     str = String(str);
+  //     return str.replace(/[^\d]+/g, "");
+  //   };
+  //   return comma(uncomma(str));
+  // }
+
+  const inputPriceFormat2 = (str) => {
+    const trans = str.replace(/[^\d]+/g, "")
+                     .replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+    return trans
   }
 
+  const handler = (e) => {
+    setValue(
+      e.target.name === 'num' ? 
+      {...value, [e.target.name] : inputPriceFormat2(e.target.value)} 
+      : 
+      {...value, [e.target.name] : e.target.value}
+    )
+  }
   return (
     <>
-    <h1>Button</h1>
-      <Article>
-        <Button color={greentitle} size={large} onClick={()=>alert("버튼을 만들어보세요")}>Large Primary Button <IoIosArrowForward /> </Button>
-        <Button color={green} size={medium}>BUTTON</Button>
-        <Button color={green} size={small}>BUTTON</Button>
-      </Article>
-      <Article>
-        <Button color={pinktitle} size={large} onClick={()=>prompt("어렵나요?")}>Large Negative Button <BsAlarm/> </Button>
-        <Button color={pink} size={medium}>BUTTON</Button>
-        <Button color={pink} size={small}>BUTTON</Button>
-      </Article>
-    <h1>Input</h1>
-      <Article>
-        
-        <div>
-          이름<input type="text" value={text} onChange={(e)=> setText(e.target.value)}/>
+    <CreateGrobal />
+    <h1>button</h1> 
+    <p>BUTTON 컴포넌트 제어하기</p>
+    <p><span className='label'>- size(1)</span> : huge(color 제어 : border에만 적용, background는 transparent)</p>
+    <p><span className='label'>- size(2)</span> : large, medium, small(default)</p>
+    <p><span className='label'>- color</span> : red, green</p>
+    <PracticeDiv1>
+        <div> 
+          <Button size="huge" color={orange} event={()=>alert("버튼을 만들어봅시다.")}>Large Primary Button <IoIosArrowForward/></Button>
+          <Button size="large" color={orange} label="BUTTON" />
+          <Button size="medium"  color={orange} label="BUTTON" />
+          <Button color={orange} label="BUTTON" />
         </div>
         <div>
-          가격<input type="text" value={num} onChange={(e)=> setNum(inputPriceFormat(e.target.value))}/>
+        <Button size="huge" color={green} event={()=>prompt("어렵나요?")}>Large Negative Button <VscBellDot/></Button>
+          <Button size="large" color={green} label="BUTTON" />
+          <Button size="medium" color={green} label="BUTTON" />
+          <Button color={green} label="BUTTON" />
         </div>
-        <div>
-          <Button color={green} size={small} onClick={()=>{alert(JSON.stringify({ name:text, price:num }).replace(/"/g,''))}}>BUTTON</Button>
-        </div>
-        
-      </Article>
-      <h1>Modal</h1>
-      <Article>
-      <Button color={green} size={small} onClick={()=> setmodal1((pre)=> !pre)}>open modal</Button>
-      <Button color={pinktitle} size={medium}>open modal</Button>
-      <Modal state={modal1}>
-          <div>나는 모달 <button onClick={()=> setmodal1((pre)=> !pre)}>버튼</button></div>
-      </Modal>
-
-      </Article>
-
+    </PracticeDiv1>
+    <h1>input</h1>
+    <div>
+    <p>INPUT 컴포넌트 제어하기 : 정규표현식</p>
+    <p><span className='label'>- 정규표현식 : <span style={{color:"red"}}>x(?=y)</span></span>란? (y)가 존재하면서, x가 존재하는 것을 찾는, 전방탐색을 의미한다.</p>
+    <p>아래의 코드를 읽어보자. /(\d)(?=(?:\d{3})...)/ (연속되는 3개의 숫자, y)가 존재하면, 앞에 있는 x가 숫자인 것을 매칭시킨다는 말이다.</p>
+    <p><span className='label'>- 정규표현식 : <span style={{color:"red"}}>x(?!y)</span></span>란? 부정 전방탐색으로, y를 만족하면서 전방에 x가 없는 경우를 말한다.</p>
+    <p><span className='label'>- 정규표현식 : <span style={{color:"red"}}>x+</span></span>란 x의 반복을 의미한다.</p>
+    <p>아래의 코드를 읽어보자. /...(?:\d{3})+(?!\d))/ 를 읽어보면, 연속되는 3개의 숫자가 반복되면을 의미한다. </p>
+    <p><span className='label'>- replace 안에 있는 내용</span>을 읽어보면 이렇다. <span style={{color:"red"}}>"$1,"</span> 이 역시도 정규표현식인데, 앞에서 생성한 정규표현식의 그룹마다 ,(콤마)를 찍어주자는 말이다.</p>
+    <p> 핵심은 (\b)에서 생성한 그룹에 달려있다. 해당 그룹이 생성되는지의 여부에 따라서 정규표현식은 동작한다.</p>
+    <p> 숫자가 3자리 이하일 때, </p>
+    <p><img src={img01}/></p>
+    </div>
+    <PracticeDiv2>
+      <div>
+        <p>이름</p>
+        <p><Input type="text" value={value.name} name="name" onChange={handler}/></p>
+        <p>가격</p>
+        <p><Input type="text" value={value.num} name="num" onChange={handler}/></p>
+        <p><Button color={green} label="저장" event={()=>{
+          alert(JSON.stringify(value).replace(/"/g,''));
+          setValue({
+            name:'',
+            num:''
+          })
+        }}/></p>
+      </div>
+    </PracticeDiv2>
+    <h1>Modal</h1> 
+    <PracticeDiv3>
+    <Button color={green}>open modal</Button>
+    <Button size="huge" color={orange}>open modal2</Button>
+    </PracticeDiv3>
     </>
   )
 }
 
-export default App;
+export default App
 
-const greentitle = {current:"white", hover:"#white", active:"gray", border:"#72C255", font:"black"}
-const green = {current:"#72C255", hover:"#ABDD99", active:"#44A720", border:"#72C255", font:"white"}
-const pinktitle = {current:"white", hover:"#white", active:"gray" , border:"#FF5EDE", font:"black"}
-const pink = {current:"#FF5EDE", hover:"#FF9EEB", active:"#FF1FD2" , border:"#FF5EDE", font:"white"}
-const large = {width:"300px", height:"80px", fontSize:"23px"}
-const medium = {width:"150px", height:"50px", fontSize:"20px"}
-const small = {width:"100px", height:"30px", fontSize:"15px"}
+const CreateGrobal = createGlobalStyle`
+  body {
+    width: 95%;
+    margin: auto;
+  }
 
-const Article = styled.article`
-  margin: 0 auto;
-  width: 95%;
-  height: 100px;
-  /* border: 1px solid black; */
+  span[class='label'] {
+    font-weight: 800;
+  }
+
+  img {
+    width: 100%;
+  }
+`
+const PracticeDiv1 = styled.div`
+width: 90%;
+margin: auto;
+
+div {
+  margin-top:10px;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  gap: 5px;
+}
+`
+const PracticeDiv2 = styled.div`
+width: 90%;
+height: 100px;
+margin: auto;
+background-color: rgba(0,0,0,0.2);
+
+div {
+  margin-top:10px;
+  display: grid;
+  grid-template-columns: 28px 1fr 28px 1fr 100px;
   gap: 10px;
-  margin-bottom: 10px;
+
+  p {
+    display: flex;
+    align-items: center;
+  }
+}
 `
 
-const Modal = styled.div`
-  display: ${({state})=> 
-                state ? 'none' : 'block'};
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+const PracticeDiv3 = styled.div`
   width: 90%;
-  height: 300px;
-  background-color:gray;
-  border-radius: 10px;
-  
-
-
-  div {
-    background-color: #72C255;
-    width: 150px;
-    height: 100px;
-    text-align: center;
-    color: white;
-    line-height: 100px;
-    font-weight: 800;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+  height: 100px;
+  margin: auto;
+  background-color: rgba(0,0,0,0.2);
 `
