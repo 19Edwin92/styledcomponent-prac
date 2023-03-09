@@ -14,7 +14,11 @@ function App() {
     name:'',
     num:'',
     edit1:false,
-    edit2:false
+    edit2:false,
+    selectbox1:false,
+    selectbox2:false,
+    select1:'아래에서 선택해주세요.',
+    select2:'아래에서 선택해주세요.',
   })
 
   // const inputPriceFormat = (str) => {
@@ -127,13 +131,29 @@ function App() {
       <h1>Select</h1>
       <PracticeDiv4>
         <div>
-          <button><span>리액트</span> ▼</button>
+          <button onClick={()=>{setValue({...value, selectbox1:!(value.selectbox1)})}}><span>{value.select1}</span> ▼</button>
+          {value.selectbox1 && (
+            <div className='SelectBoxDiv'>
+            <button onClick={(e)=> {setValue({...value, select1:e.target.value})}} className='SelectBox' value="리액트">리액트</button>
+            <button onClick={(e)=> {setValue({...value, select1:e.target.value})}} className='SelectBox' value="자바">자바</button>
+            <button onClick={(e)=> {setValue({...value, select1:e.target.value})}} className='SelectBox' value="스프링">스프링</button>
+            <button onClick={(e)=> {setValue({...value, select1:e.target.value})}} className='SelectBox' value="리액트 네이티브">리액트 네이티브</button>
+          </div> 
+          )}
         </div>
-        <div>
-        <button><span>리액트</span> ▼</button>
+        <div style={{overflow:'hidden'}}>
+          <button onClick={()=>{setValue({...value, selectbox2:!(value.selectbox2)})}}><span>{value.select2}</span> ▼</button>
+          {value.selectbox2 && (
+            <div className='SelectBoxDiv2'>
+            <button onClick={(e)=> {setValue({...value, select2:e.target.value})}} className='SelectBox' value="리액트">리액트</button>
+            <button onClick={(e)=> {setValue({...value, select2:e.target.value})}} className='SelectBox' value="자바">자바</button>
+            <button onClick={(e)=> {setValue({...value, select2:e.target.value})}} className='SelectBox' value="스프링">스프링</button>
+            <button onClick={(e)=> {setValue({...value, select2:e.target.value})}} className='SelectBox' value="리액트 네이티브">리액트 네이티브</button>
+          </div> 
+          )}
         </div>
       </PracticeDiv4>  
-
+        
     </>
   )
 }
@@ -233,13 +253,14 @@ const ModalinnerBox = styled.div`
 
 const PracticeDiv4 = styled.div`
   width: 90%;
-  height: 200px;
+  height: 100px;
   margin: auto;
   border: 2px solid gray;
   border-radius: 10px;
   display: grid;
   text-align: center;
   grid-template-columns: 1fr 1fr;
+
   gap: 10px;
   margin-bottom: 20px;
 
@@ -256,4 +277,53 @@ const PracticeDiv4 = styled.div`
       width: 150px;
     }
   }
+  div[class='SelectBoxDiv'] {
+    background-color: white;
+    width: 78%;
+    height: 120px;
+    position: relative;
+    top: 5px;
+    border: 1px solid black;
+    border-radius: 15px;
+    margin: 0 auto;
+    z-index: 999;
+    overflow: hidden;
+
+    button[class='SelectBox']{
+      display: inline-block;
+      margin: 0;
+      width: 100%;
+      border: none;
+      &:hover {
+        background-color: rgba(0,0,0,0.1);
+      }
+      border-radius: 0;
+    }
+  }
+  div[class='SelectBoxDiv2'] {
+    background-color: white;
+    width: 78%;
+    height: 120px;
+    position: relative;
+    top: 5px;
+    border: 1px solid black;
+    border-radius: 15px;
+    margin: 0 auto;
+    z-index: 999;
+    overflow: hidden;
+
+    button[class='SelectBox']{
+      display: inline-block;
+      margin: 0;
+      width: 100%;
+      border: none;
+      &:hover {
+        background-color: rgba(0,0,0,0.1);
+      }
+      border-radius: 0;
+    }
+  }
 `
+
+// div className='SelectBoxDiv'>
+//           <button className='SelectBox'></button>
